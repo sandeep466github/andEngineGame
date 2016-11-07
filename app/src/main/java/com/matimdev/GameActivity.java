@@ -1,6 +1,11 @@
 package com.matimdev;
 
-import java.io.IOException;
+import android.app.Activity;
+import android.util.DisplayMetrics;
+import android.view.KeyEvent;
+
+import com.matimdev.manager.ResourcesManager;
+import com.matimdev.manager.SceneManager;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
@@ -14,15 +19,7 @@ import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
-import android.app.Activity;
-import android.net.Uri;
-import android.util.DisplayMetrics;
-import android.view.KeyEvent;
-
-import com.facebook.FacebookSdk;
-import com.facebook.share.model.ShareLinkContent;
-import com.matimdev.manager.ResourcesManager;
-import com.matimdev.manager.SceneManager;
+import java.io.IOException;
 
 /**
  * @author Mateusz Mysliwiec
@@ -52,8 +49,6 @@ public class GameActivity extends BaseGameActivity
 		DisplayMetrics metrics = new DisplayMetrics();
 		 getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-
-		FacebookSdk.sdkInitialize(getApplicationContext());
 
 		screenWidth =  metrics.widthPixels;
 		screenHeight = metrics.heightPixels;
@@ -106,16 +101,6 @@ public class GameActivity extends BaseGameActivity
 		super.onDestroy();
 		System.exit(0);	
 	}
-
-
-
-	public void facebook_share()
-	{
-		ShareLinkContent content = new ShareLinkContent.Builder()
-				.setContentUrl(Uri.parse("https://developers.facebook.com"))
-				.build();
-	}
-
 
 
 }

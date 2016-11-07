@@ -1,8 +1,21 @@
 package com.matimdev.scene;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Random;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.matimdev.GameActivity;
+import com.matimdev.base.BaseScene;
+import com.matimdev.manager.SceneManager;
+import com.matimdev.manager.SceneManager.SceneType;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
@@ -21,22 +34,9 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
-
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.matimdev.GameActivity;
-import com.matimdev.base.BaseScene;
-import com.matimdev.manager.SceneManager;
-import com.matimdev.manager.SceneManager.SceneType;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * @author Mateusz Mysliwiec
@@ -732,7 +732,7 @@ public class GameScene extends BaseScene
 		    	  if(pSceneTouchEvent.isActionUp())
 		    	  {
 		    		  facebook_button.setScale(((float)((double)fail_background_image.getWidth()/480)*(facebook_button.getWidth())) / (facebook_button.getWidth()*2f));
-					  ((GameActivity)GameActivity.gameActivity).facebook_share();
+
 		    	  }
 		         return true;
 		      }

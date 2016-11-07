@@ -34,5 +34,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.0'
     compile files('lib.jar')
     compile project(':AndEnginePhysicsBox2DExtension')
-    compile 'com.facebook.android:facebook-android-sdk:4.8.0'
 }

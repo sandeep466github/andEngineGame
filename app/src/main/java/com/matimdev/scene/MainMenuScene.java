@@ -1,25 +1,12 @@
 package com.matimdev.scene;
 
-import org.andengine.engine.camera.Camera;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
-import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
-import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.util.GLState;
-import org.andengine.util.modifier.IModifier;
-import org.andengine.util.modifier.ease.EaseBackIn;
-
 import com.matimdev.GameActivity;
 import com.matimdev.base.BaseScene;
 import com.matimdev.manager.SceneManager;
 import com.matimdev.manager.SceneManager.SceneType;
+
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
 
 public class MainMenuScene extends BaseScene 
 {
@@ -139,7 +126,7 @@ public class MainMenuScene extends BaseScene
 		    	  if(pSceneTouchEvent.isActionUp())
 		    	  {
 		    		  more_games_button.setScale(((float)((double)screen_width/480)*(more_games_button.getWidth())) / (more_games_button.getWidth()*4));
-					  ((GameActivity)GameActivity.gameActivity).facebook_share();
+
 								
 		    	  }
 		    	  
