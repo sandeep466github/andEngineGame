@@ -2,6 +2,7 @@ package com.matimdev;
 
 import android.app.Activity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import com.matimdev.manager.ResourcesManager;
@@ -29,9 +30,10 @@ import java.io.IOException;
 public class GameActivity extends BaseGameActivity
 {
 	private BoundCamera camera;
-	public int screenHeight,screenWidth;
-	
-	public static Activity gameActivity;
+
+    public int screenHeight,screenWidth;
+
+    public static Activity gameActivity;
 	
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) 
@@ -41,21 +43,22 @@ public class GameActivity extends BaseGameActivity
 	
 	public EngineOptions onCreateEngineOptions()
 	{
-		camera = new BoundCamera(0, 0, 480, 800);
-		
-		
-		gameActivity = GameActivity.this;
-		
-		DisplayMetrics metrics = new DisplayMetrics();
-		 getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 
-		screenWidth =  metrics.widthPixels;
-		screenHeight = metrics.heightPixels;
-		
-		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new FillResolutionPolicy(), this.camera);
+        gameActivity = GameActivity.this;
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+
+        screenWidth =  metrics.widthPixels;
+        screenHeight = metrics.heightPixels;
+
+        camera = new BoundCamera(0, 0, screenWidth, screenHeight);
+
+
+        EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new FillResolutionPolicy(), this.camera);
 		engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
-		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
 		engineOptions.getRenderOptions().getConfigChooserOptions().setRequestedMultiSampling(true);
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		return engineOptions;
@@ -84,12 +87,13 @@ public class GameActivity extends BaseGameActivity
 
 	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException
 	{
+		Log.e("GameActivity","onPupulateScene()");
 		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
 		{
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
-                SceneManager.getInstance().createMenuScene();
+                SceneManager.getInstance().createWeightScene(mEngine);
             }
 		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
@@ -101,6 +105,4 @@ public class GameActivity extends BaseGameActivity
 		super.onDestroy();
 		System.exit(0);	
 	}
-
-
 }

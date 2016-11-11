@@ -1,13 +1,16 @@
 package com.matimdev.manager;
 
-import org.andengine.engine.Engine;
-import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
-
 import com.matimdev.base.BaseScene;
 import com.matimdev.scene.GameScene;
 import com.matimdev.scene.LoadingScene;
 import com.matimdev.scene.MainMenuScene;
 import com.matimdev.scene.SplashScene;
+import com.matimdev.scene.WeightScene;
+
+import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 /**
  * @author Mateusz Mysliwiec
@@ -24,6 +27,7 @@ public class SceneManager
 	private BaseScene menuScene;
 	private BaseScene gameScene;
 	private BaseScene loadingScene;
+	private BaseScene weightScene;
 	
 	//---------------------------------------------
 	// VARIABLES
@@ -43,6 +47,7 @@ public class SceneManager
 		SCENE_MENU,
 		SCENE_GAME,
 		SCENE_LOADING,
+        SCENE_WEIGHT,
 	}
 	
 	//---------------------------------------------
@@ -72,6 +77,8 @@ public class SceneManager
 			case SCENE_LOADING:
 				setScene(loadingScene);
 				break;
+            case SCENE_WEIGHT:
+                setScene(weightScene);
 			default:
 				break;
 		}
@@ -79,29 +86,11 @@ public class SceneManager
 	
 	public void createMenuScene()
 	{
-		IAsyncCallback  callback = new IAsyncCallback () {
-	       	 
-            public void workToDo() 
-            {
-
-            	ResourcesManager.getInstance().loadMenuResources();
-            		
-            	ResourcesManager.getInstance().load_loading_graphics();
-        		loadingScene = new LoadingScene();
-        		disposeSplashScene();
-            }
-
-            public void onComplete() 
-            {
-            	menuScene = new MainMenuScene();
-            	SceneManager.getInstance().setScene(menuScene);
-                
-                
-            }
-		};
-		
-		new LoadScene().execute(callback);
-	
+		ResourcesManager.getInstance().loadMenuResources();
+		menuScene = new MainMenuScene();
+		loadingScene = new LoadingScene();
+        SceneManager.getInstance().setScene(menuScene);
+        disposeSplashScene();
 	}
 	
 	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
@@ -111,6 +100,28 @@ public class SceneManager
 		currentScene = splashScene;
 		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
 	}
+
+	public void createWeightScene(final Engine mEngine)
+	{
+//        setScene(loadingScene);
+
+
+
+
+		ResourcesManager.getInstance().loadWeightSceneTextures();
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback()
+		{
+			public void onTimePassed(final TimerHandler pTimerHandler)
+			{
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadWeightSceneTextures();
+                weightScene = new WeightScene();
+//        loadingScene = new LoadingScene();
+                SceneManager.getInstance().setScene(weightScene);
+                disposeSplashScene();
+			}
+		}));
+	}
 	
 	private void disposeSplashScene()
 	{
@@ -119,116 +130,36 @@ public class SceneManager
 		splashScene = null;
 	}
 	
-//	public void loadGameScene(final Engine mEngine)
-//	{
-//		setScene(loadingScene);
-//		ResourcesManager.getInstance().unloadMenuTextures();
-//		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
-//		{
-//            public void onTimePassed(final TimerHandler pTimerHandler) 
-//            {
-//            	mEngine.unregisterUpdateHandler(pTimerHandler);
-//            	ResourcesManager.getInstance().loadGameResources();
-//        		gameScene = new GameScene();
-//        		setScene(gameScene);
-//            }
-//		}));
-//	}
-	
 	public void loadGameScene(final Engine mEngine)
 	{
-
 		setScene(loadingScene);
-		
-		IAsyncCallback  callback = new IAsyncCallback () {
-	       	 
-            public void workToDo() 
+		ResourcesManager.getInstance().unloadMenuTextures();
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+		{
+            public void onTimePassed(final TimerHandler pTimerHandler) 
             {
-
-            		ResourcesManager.getInstance().unloadMenuTextures();
-            		
-                	ResourcesManager.getInstance().loadGameResources();
-            }
-
-            public void onComplete() 
-            {
-            	
+            	mEngine.unregisterUpdateHandler(pTimerHandler);
+            	ResourcesManager.getInstance().loadGameResources();
         		gameScene = new GameScene();
         		setScene(gameScene);
             }
-		};
-		
-		new LoadScene().execute(callback);
+		}));
 	}
 	
-	
-	public void ReLoadGameScene(final Engine mEngine)
+	public void loadMenuScene(final Engine mEngine)
 	{
-
 		setScene(loadingScene);
-		
-		IAsyncCallback  callback = new IAsyncCallback () {
-	       	 
-            public void workToDo() 
+		gameScene.disposeScene();
+		ResourcesManager.getInstance().unloadGameTextures();
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+		{
+            public void onTimePassed(final TimerHandler pTimerHandler) 
             {
-
-            	ResourcesManager.getInstance().unloadGameTextures();
-                	ResourcesManager.getInstance().loadGameResources();
-            }
-
-            public void onComplete() 
-            {
-            	
-        		gameScene = new GameScene();
-        		setScene(gameScene);
-            }
-		};
-		
-		new LoadScene().execute(callback);
-	}
-	
-	
-//	public void loadMenuScene(final Engine mEngine)
-//	{
-//		setScene(loadingScene);
-//		gameScene.disposeScene();
-//		ResourcesManager.getInstance().unloadGameTextures();
-//		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
-//		{
-//            public void onTimePassed(final TimerHandler pTimerHandler) 
-//            {
-//            	mEngine.unregisterUpdateHandler(pTimerHandler);
-//            	ResourcesManager.getInstance().loadMenuTextures();
-//        		setScene(menuScene);
-//            }
-//		}));
-//	}
-	
-	public void loadMenuSceneFromGamescene(final Engine mEngine)
-	{
-
-		setScene(loadingScene);
-		
-		IAsyncCallback  callback = new IAsyncCallback () {
-	       	 
-            public void workToDo() 
-            {
-            	gameScene.disposeScene();
-
-            	ResourcesManager.getInstance().unloadGameTextures();
-            		
+            	mEngine.unregisterUpdateHandler(pTimerHandler);
             	ResourcesManager.getInstance().loadMenuTextures();
-            }
-
-            public void onComplete() 
-            {
-            	
-            	menuScene = new MainMenuScene();
         		setScene(menuScene);
             }
-		};
-		
-		new LoadScene().execute(callback);
+		}));
 	}
 	
 	//---------------------------------------------
